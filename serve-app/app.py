@@ -9,7 +9,7 @@ class DataModel(BaseModel):
 
 app = FastAPI()
 
-@app.post("/question_answering")
+@app.post("/qa")
 async def qa(input: DataModel):
     result = model(
         question=input.question,
