@@ -1,7 +1,7 @@
 import uvicorn
 from pydantic import BaseModel
 from fastapi import FastAPI
-from qa_model.bert_qa import model
+from .bert import qa_model
 
 class DataModel(BaseModel):
     question: str
@@ -10,14 +10,15 @@ class DataModel(BaseModel):
 app = FastAPI()
 
 @app.post("/qa")
-async def qa(input: DataModel):
-    result = model(
+async def qa(input: DataModel) -> dict:
+    result = qa_model(
         question=input.question,
         context=input.context,
     )
+
     return {
         "result":result["answer"]
     }
 
-if __name__ == 'main':
-    uvicorn.run('main:app', workers=4)
+if __name__ == '__main__':
+    uvicorn.run('main:app', workers=3)
